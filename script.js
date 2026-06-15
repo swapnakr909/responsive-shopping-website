@@ -173,12 +173,6 @@ function renderPaymentPage() {
   if (paymentTotal) paymentTotal.innerText = formatPrice(total);
   if (payNowBtn) {
     payNowBtn.disabled = false;
-    payNowBtn.onclick = function(e) {
-      e.preventDefault();
-      localStorage.removeItem('cart');
-      showToast('Payment successful! Your order is confirmed.');
-      window.location.href = 'home.html';
-    };
   }
 }
 
