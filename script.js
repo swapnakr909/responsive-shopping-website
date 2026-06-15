@@ -214,41 +214,68 @@ function updatePaymentFields() {
   }
 }
 
+function validatePaymentForm() {
+  const nameField = document.getElementById('name');
+  const emailField = document.getElementById('email');
+  const methodField = document.getElementById('paymentMethod');
+  const detailsField = document.getElementById('paymentDetails');
+  const expiryField = document.getElementById('expiry');
+  const locationField = document.getElementById('location');
+
+  const emptyFields = [];
+
+  if (!nameField || !nameField.value.trim()) {
+    emptyFields.push('Full name');
+  }
+  if (!emailField || !emailField.value.trim()) {
+    emptyFields.push('Email address');
+  }
+  if (!methodField || !methodField.value) {
+    emptyFields.push('Payment method');
+  }
+  if (!detailsField || !detailsField.value.trim()) {
+    emptyFields.push('Payment details');
+  }
+  if (!locationField || !locationField.value.trim()) {
+    emptyFields.push('Delivery location');
+  }
+
+  const expiryRow = document.getElementById('expiryRow');
+  if (expiryRow && expiryRow.style.display !== 'none') {
+    if (!expiryField || !expiryField.value.trim()) {
+      emptyFields.push('Expiry date');
+    }
+  }
+
+  return emptyFields;
+}
+
 function setupPaymentInteractions() {
   const methodSelect = document.getElementById('paymentMethod');
-  const locationBtn = document.getElementById('locationBtn');
-  const locationOutput = document.getElementById('locationOutput');
   const paymentForm = document.getElementById('paymentForm');
+  const payNowBtn = document.getElementById('payNowBtn');
 
   if (methodSelect) {
     methodSelect.addEventListener('change', updatePaymentFields);
     updatePaymentFields();
   }
 
-  if (locationBtn && locationOutput) {
-    locationBtn.addEventListener('click', () => {
-      if (!navigator.geolocation) {
-        locationOutput.innerText = 'Geolocation is not supported by your browser.';
-        return;
-      }
-      locationOutput.innerText = 'Getting location…';
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          locationOutput.innerText = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
-        },
-        () => {
-          locationOutput.innerText = 'Unable to get your location. Please enable location access.';
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    });
-  }
-
   if (paymentForm) {
     paymentForm.addEventListener('submit', event => {
       event.preventDefault();
-      const payNowBtn = document.getElementById('payNowBtn');
-      if (payNowBtn) payNowBtn.click();
+      
+      const emptyFields = validatePaymentForm();
+      
+      if (emptyFields.length > 0) {
+        showToast('Please fill in: ' + emptyFields.join(', '));
+        return;
+      }
+
+      localStorage.removeItem('cart');
+      showToast('Payment successful! Your order has been confirmed.');
+      setTimeout(() => {
+        window.location.href = 'home.html';
+      }, 2000);
     });
   }
 }
@@ -261,6 +288,7 @@ if (document.getElementById("cartItems")) {
 // Run payment page setup when on payment page
 if (document.getElementById('paymentForm')) {
   renderPaymentPage();
+  setupPaymentInteractions();
 }
 
 // Search Functionality
