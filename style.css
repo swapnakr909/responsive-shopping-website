@@ -442,6 +442,123 @@ nav ul li a.active::after {
   border-bottom: none;
 }
 
+.checkout-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.checkout-btn {
+  padding: 16px 32px;
+}
+
+.payment-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+  flex: 1;
+}
+
+.payment-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+.payment-card,
+.payment-summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 30px;
+}
+
+.payment-card h2,
+.payment-summary-card h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.payment-form {
+  display: grid;
+  gap: 18px;
+}
+
+.field-group {
+  display: grid;
+  gap: 8px;
+}
+
+.field-group label {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.field-group input,
+.field-group select {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg-color);
+  color: var(--text-light);
+  outline: none;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.payment-summary-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.payment-summary-card li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 16px;
+}
+
+.payment-summary-card li:last-child {
+  border-bottom: none;
+}
+
+.payment-summary-card .summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.payment-summary-card .summary-note {
+  color: var(--text-muted);
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+#paymentEmptyMsg {
+  text-align: center;
+  font-size: 20px;
+  color: var(--text-muted);
+  padding: 40px 0;
+}
+
 .cart-total {
   margin-top: 30px;
   padding-top: 30px;

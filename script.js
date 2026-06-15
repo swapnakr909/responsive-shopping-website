@@ -126,11 +126,70 @@ function renderCart() {
   totalElement.innerHTML = `<span>Total:</span> <span>${formatPrice(total)}</span>`;
 
   list.appendChild(totalElement);
+
+  const checkoutActions = document.getElementById('checkoutActions');
+  if (checkoutActions) {
+    checkoutActions.innerHTML = '';
+    const checkoutBtn = document.createElement('button');
+    checkoutBtn.className = 'btn checkout-btn';
+    checkoutBtn.textContent = 'Checkout';
+    checkoutBtn.onclick = () => window.location.href = 'payment.html';
+    checkoutActions.appendChild(checkoutBtn);
+  }
+}
+
+function renderPaymentPage() {
+  const paymentItems = document.getElementById('paymentItems');
+  const paymentTotal = document.getElementById('paymentTotal');
+  const emptyMessage = document.getElementById('paymentEmptyMsg');
+  const payNowBtn = document.getElementById('payNowBtn');
+  const paymentSummary = document.getElementById('paymentSummary');
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  if (cart.length === 0) {
+    if (paymentSummary) paymentSummary.classList.add('hidden');
+    if (emptyMessage) {
+      emptyMessage.innerText = 'Your cart is empty. Add items from the shop first.';
+      emptyMessage.style.display = 'block';
+    }
+    if (payNowBtn) payNowBtn.disabled = true;
+    return;
+  }
+
+  if (paymentSummary) paymentSummary.classList.remove('hidden');
+  if (emptyMessage) emptyMessage.style.display = 'none';
+
+  paymentItems.innerHTML = '';
+  let total = 0;
+
+  cart.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${item.name}</span><span>${formatPrice(item.price)}</span>`;
+    paymentItems.appendChild(li);
+    total += item.price;
+  });
+
+  if (paymentTotal) paymentTotal.innerText = formatPrice(total);
+  if (payNowBtn) {
+    payNowBtn.disabled = false;
+    payNowBtn.onclick = function(e) {
+      e.preventDefault();
+      localStorage.removeItem('cart');
+      showToast('Payment successful! Your order is confirmed.');
+      window.location.href = 'home.html';
+    };
+  }
 }
 
 // Run renderCart if we are on the cart page
 if (document.getElementById("cartItems")) {
   renderCart();
+}
+
+// Run payment page setup when on payment page
+if (document.getElementById('paymentForm')) {
+  renderPaymentPage();
 }
 
 // Search Functionality
