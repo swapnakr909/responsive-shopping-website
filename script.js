@@ -182,6 +182,77 @@ function renderPaymentPage() {
   }
 }
 
+function updatePaymentFields() {
+  const methodSelect = document.getElementById('paymentMethod');
+  const detailsLabel = document.getElementById('paymentDetailsLabel');
+  const detailsInput = document.getElementById('paymentDetails');
+  const expiryRow = document.getElementById('expiryRow');
+
+  if (!methodSelect || !detailsLabel || !detailsInput || !expiryRow) return;
+
+  const method = methodSelect.value;
+  if (method === 'card') {
+    detailsLabel.textContent = 'Card number';
+    detailsInput.placeholder = '1234 5678 9012 3456';
+    detailsInput.required = true;
+    expiryRow.style.display = 'grid';
+  } else if (method === 'upi') {
+    detailsLabel.textContent = 'UPI ID';
+    detailsInput.placeholder = 'name@upi';
+    detailsInput.required = true;
+    expiryRow.style.display = 'none';
+  } else if (method === 'netbanking') {
+    detailsLabel.textContent = 'Bank name / UPI';
+    detailsInput.placeholder = 'Your bank or UPI ID';
+    detailsInput.required = true;
+    expiryRow.style.display = 'none';
+  } else if (method === 'wallet') {
+    detailsLabel.textContent = 'Wallet provider';
+    detailsInput.placeholder = 'PhonePe, Google Pay, Paytm';
+    detailsInput.required = true;
+    expiryRow.style.display = 'none';
+  }
+}
+
+function setupPaymentInteractions() {
+  const methodSelect = document.getElementById('paymentMethod');
+  const locationBtn = document.getElementById('locationBtn');
+  const locationOutput = document.getElementById('locationOutput');
+  const paymentForm = document.getElementById('paymentForm');
+
+  if (methodSelect) {
+    methodSelect.addEventListener('change', updatePaymentFields);
+    updatePaymentFields();
+  }
+
+  if (locationBtn && locationOutput) {
+    locationBtn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        locationOutput.innerText = 'Geolocation is not supported by your browser.';
+        return;
+      }
+      locationOutput.innerText = 'Getting location…';
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          locationOutput.innerText = `Lat: ${position.coords.latitude.toFixed(4)}, Lon: ${position.coords.longitude.toFixed(4)}`;
+        },
+        () => {
+          locationOutput.innerText = 'Unable to get your location. Please enable location access.';
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+  }
+
+  if (paymentForm) {
+    paymentForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const payNowBtn = document.getElementById('payNowBtn');
+      if (payNowBtn) payNowBtn.click();
+    });
+  }
+}
+
 // Run renderCart if we are on the cart page
 if (document.getElementById("cartItems")) {
   renderCart();

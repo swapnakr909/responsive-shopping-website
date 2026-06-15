@@ -46,18 +46,27 @@
             <input id="email" type="email" placeholder="name@example.com" required>
           </div>
           <div class="field-group">
-            <label for="cardNumber">Card number</label>
-            <input id="cardNumber" type="text" placeholder="1234 5678 9012 3456" required>
+            <label for="paymentMethod">Payment method</label>
+            <select id="paymentMethod" required>
+              <option value="card">Credit / Debit Card</option>
+              <option value="upi">UPI</option>
+              <option value="netbanking">Netbanking</option>
+              <option value="wallet">Wallet</option>
+            </select>
           </div>
-          <div class="field-row">
+          <div class="field-group">
+            <label id="paymentDetailsLabel" for="paymentDetails">Card number</label>
+            <input id="paymentDetails" type="text" placeholder="1234 5678 9012 3456" required>
+          </div>
+          <div class="field-row" id="expiryRow">
             <div class="field-group">
               <label for="expiry">Expiry date</label>
               <input id="expiry" type="text" placeholder="MM/YY" required>
             </div>
-            <div class="field-group">
-              <label for="cvc">CVC</label>
-              <input id="cvc" type="text" placeholder="123" required>
-            </div>
+          </div>
+          <div class="field-group location-group">
+            <button id="locationBtn" class="btn secondary-btn" type="button">Use my location</button>
+            <div id="locationOutput" class="location-output"></div>
           </div>
           <button id="payNowBtn" class="btn" type="submit">Pay Now</button>
         </form>
